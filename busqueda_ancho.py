@@ -7,10 +7,10 @@ def busqueda_ancho(frontera: list[Nodo], objetivo: Nodo):
 
     estadoActual = frontera.pop(0)
 
-    if estadoActual.valor == objetivo:
+    if estadoActual.valor == objetivo.valor:
         return 'Encontrado'
 
     offspring = expand(estadoActual)
     frontera = frontera + offspring
 
-    busqueda_ancho(frontera, objetivo)
+    return busqueda_ancho(frontera, objetivo)

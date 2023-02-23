@@ -1,5 +1,5 @@
-from nodo import *
-from expand import *
+from classes.nodo import *
+from utilities.expand import *
 
 def busqueda_ancho(frontera: list[Nodo], objetivo: Nodo): 
     if not len(frontera):

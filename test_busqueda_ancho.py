@@ -1,5 +1,6 @@
-from busqueda_ancho import *
-from nodo import * 
+
+from busquedas.busqueda_ancho import busqueda_ancho
+from classes.nodo import Nodo
 
 raiz = Nodo(1)
 nivel_1_1 = Nodo(2)

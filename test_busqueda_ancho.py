@@ -1,8 +1,11 @@
 
 from busquedas.busqueda_ancho import busqueda_ancho
+from classes.arbol import Arbol
 from classes.nodo import Nodo
 
 raiz = Nodo(1)
+arbol = Arbol(raiz)
+
 nivel_1_1 = Nodo(2)
 nivel_1_2 = Nodo(3)
 raiz.hijos = [nivel_1_1, nivel_1_2]
@@ -32,7 +35,7 @@ nivel_2_2.hijos = [nivel_3_3, nivel_3_4]
 nivel_2_3.hijos = [nivel_3_5, nivel_3_6]
 nivel_2_4.hijos = [nivel_3_7, nivel_3_8]
 
-objetivo = nivel_3_5
-resultado = busqueda_ancho([raiz], objetivo)
+objetivo = Nodo(14)
+encontrado = busqueda_ancho([raiz], objetivo)
 
-print(resultado)
+print('Encontrado' if encontrado else 'No encontrado')

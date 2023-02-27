@@ -1,16 +1,16 @@
-from classes.nodo import *
-from utilities.expand import *
+from classes.nodo import Nodo
+from utilities.expand import expand
 
 def busqueda_ancho(frontera: list[Nodo], objetivo: Nodo): 
-    if not len(frontera):
-        return 'No Encontrado'
+    if not frontera:
+        return False
 
-    estadoActual = frontera.pop(0)
+    estado_actual = frontera.pop(0)
 
-    if estadoActual.valor == objetivo.valor:
-        return 'Encontrado'
+    if estado_actual.valor == objetivo.valor:
+        return True
 
-    offspring = expand(estadoActual)
-    frontera = frontera + offspring
+    os = expand(estado_actual)
+    frontera = frontera + os
 
     return busqueda_ancho(frontera, objetivo)

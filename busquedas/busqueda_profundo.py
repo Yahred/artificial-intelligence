@@ -1,7 +1,7 @@
 from classes.nodo import Nodo
 from utilities.expand import expand
 
-def busqueda_ancho(frontera: list[Nodo], objetivo: Nodo): 
+def busqueda_profundo(frontera: list[Nodo], objetivo: Nodo): 
     if not frontera:
         return False
 
@@ -10,6 +10,6 @@ def busqueda_ancho(frontera: list[Nodo], objetivo: Nodo):
         return True
 
     os = expand(estado_actual)
-    frontera = frontera + os
+    frontera = os + frontera
 
-    return busqueda_ancho(frontera, objetivo)
+    return busqueda_profundo(frontera, objetivo)

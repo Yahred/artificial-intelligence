@@ -3,11 +3,11 @@ Repositorio para los trabajos de la materia Tópicos de inteligencia artificial 
 
 ## Contenidos
  * busquedas
-  * busqueda_ancho
-  * busqueda_profundo
+   * busqueda_ancho
+   * busqueda_profundo
  * clases
-  * Nodo
-  * Arbol
+   * Nodo
+   * Arbol
  * utilidades
    * Expand
 ## Integrantes:

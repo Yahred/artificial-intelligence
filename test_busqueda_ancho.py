@@ -35,7 +35,7 @@ nivel_2_2.hijos = [nivel_3_3, nivel_3_4]
 nivel_2_3.hijos = [nivel_3_5, nivel_3_6]
 nivel_2_4.hijos = [nivel_3_7, nivel_3_8]
 
-objetivo = Nodo(14)
+objetivo = Nodo(18)
 encontrado = busqueda_ancho([raiz], objetivo)
 
 print('Encontrado' if encontrado else 'No encontrado')

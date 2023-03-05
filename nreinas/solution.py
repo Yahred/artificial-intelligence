@@ -3,7 +3,7 @@ def solve(configuration: list[int]) -> int:
     n_reinas = len(configuration)
 
     for i in range(n_reinas):
-        pos_a = configuration [i]
+        pos_a = configuration[i]
 
         for j in range(i+1, n_reinas):
             pos_b = configuration[j]
@@ -17,6 +17,6 @@ def solve(configuration: list[int]) -> int:
     
     return numero_ataques
 
-
-result = solve([0, 0, 0, 0])
-print(result)
+if __name__ == '__main__':
+    result = solve([0, 0, 0, 0])
+    print(result)

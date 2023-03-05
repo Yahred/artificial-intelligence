@@ -15,7 +15,6 @@ def execute():
     chessboard.add_reinas(reinas_config)
 
     time.sleep(2)
-    chessboard.clear()
 
 window.after(1000, execute)
 window.mainloop()

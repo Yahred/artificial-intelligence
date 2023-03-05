@@ -6,23 +6,12 @@ from PIL import ImageTk
 absolute_folder_path = os.path.dirname(os.path.realpath(__file__))
 absolute_image_path = os.path.join(absolute_folder_path, 'reina.gif')
 
-class Queen:
-    def __init__(self, x: int = None, y: int = None) -> None:
-        self.x = x
-        self.y = y
-
-    def draw(self):
-        img = ImageTk.open('assets/reina.gif')
-        img = img.resize([40, 40])
-        img = tk.PhotoImage(img)
-        return img
-
 class Chessboard:
 
-    def __init__(self, window: tk.Tk, n_reinas: int = 4, reinas: list[Queen] = []) -> None:
+    def __init__(self, window: tk.Tk, n_reinas: int = 4) -> None:
         self.n_reinas = n_reinas
-        self.reinas = reinas
         self.queensize = 80
+        self.img_reina = tk.PhotoImage(file=absolute_image_path)
         self.window = window
         self.reinas = []
         self.construir_campo()
@@ -42,10 +31,6 @@ class Chessboard:
                 color = fill_color_pattern[j % 2 == 0]
                 self.campo.create_rectangle(x1, y1, x2, y2, fill=color)
 
-    def draw_queen(self):
-        img = tk.PhotoImage(file = absolute_image_path)
-        return img
-
     def add_reina(self, x: int, y: int):
         x1 = (x * self.queensize / 2) + self.queensize / 4
         x2 = x1 + self.queensize / 2
@@ -62,15 +47,14 @@ class Chessboard:
             x = i
             y = reinas[i]
             
-            x1 = (x * self.queensize) + self.queensize / 4
-            x2 = x1 + self.queensize / 2
+            x1 = (x * self.queensize) + self.queensize / 2
 
-            y1 = (y * self.queensize) + self.queensize / 4
-            y2 = y1 + self.queensize / 2
+            y1 = (y * self.queensize) + self.queensize / 2
 
-            reina = self.campo.create_image(0, 0, {'image': self.draw_queen()})
+            reina = self.campo.create_image(x1, y1, {'image': self.img_reina})
+            self.window.update()
+            print('adding reina')
             self.reinas.append(reina)
-        self.window.update()
 
     def clear(self):
         for reina in self.reinas:

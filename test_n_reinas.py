@@ -13,6 +13,7 @@ chessboard.pack()
 def execute():
     reinas_config = np.zeros(n_reinas, dtype=int)
     chessboard.add_reinas(reinas_config)
+    chessboard.draw_attack([0, 0], [3,3])
 
     time.sleep(2)
 

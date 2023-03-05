@@ -4,7 +4,7 @@ import numpy as np
 from PIL import ImageTk
 
 absolute_folder_path = os.path.dirname(os.path.realpath(__file__))
-absolute_image_path = os.path.join(absolute_folder_path, 'reina.gif')
+absolute_image_path = os.path.join(absolute_folder_path, 'assets/reina.gif')
 
 class Chessboard:
 
@@ -33,12 +33,9 @@ class Chessboard:
 
     def add_reina(self, x: int, y: int):
         x1 = (x * self.queensize / 2) + self.queensize / 4
-        x2 = x1 + self.queensize / 2
-
         y1 = (y * self.queensize / 2) + self.queensize / 4
-        y2 = y1 + self.queensize / 2
         
-        reina = self.campo.create_rectangle(x1, y1, x2, y2, fill='red')
+        reina = self.campo.create_image(x1, y1, {'image': self.img_reina})
         self.reinas.append(reina)
         self.window.update()
 
@@ -53,8 +50,19 @@ class Chessboard:
 
             reina = self.campo.create_image(x1, y1, {'image': self.img_reina})
             self.window.update()
-            print('adding reina')
             self.reinas.append(reina)
+
+    def draw_attack(self, pos_a: tuple[int, int], pos_b: tuple[int, int]) -> None:
+        x1, y1 = pos_a
+        x2, y2 = pos_b
+
+        x1 = x1 * self.queensize + self.queensize / 2
+        y1 = y1 * self.queensize + self.queensize / 2
+        x2 = x2 * self.queensize + self.queensize / 2
+        y2 = y2 * self.queensize + self.queensize / 2
+
+        self.campo.create_line(x1, y1, x2, y2, fill='red', width=15)
+        self.window.update()        
 
     def clear(self):
         for reina in self.reinas:

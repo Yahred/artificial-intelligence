@@ -1,16 +1,23 @@
+import time
 import tkinter as tk
+import numpy as np
+
 from nreinas.chessboard import Chessboard
 
+n_reinas = int(input('Introduzca el número de reinas: '))
+
 window = tk.Tk()
-chessboard = Chessboard(window)
+chessboard = Chessboard(window, n_reinas)
 chessboard.pack()
 
-def add_queen():
-    chessboard.add_reina()
-    print('im not updating')
-    window.update_idletasks()
+def execute():
+    reinas_config = np.zeros(n_reinas, dtype=int)
+    chessboard.add_reinas(reinas_config)
 
-window.after(2000, add_queen)
+    time.sleep(2)
+    chessboard.clear()
+
+window.after(1000, execute)
 window.mainloop()
 
 

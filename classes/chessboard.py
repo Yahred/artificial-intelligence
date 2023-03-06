@@ -14,6 +14,7 @@ class Chessboard:
         self.img_reina = tk.PhotoImage(file=absolute_image_path)
         self.window = window
         self.reinas = []
+        self.ataques = []
         self.construir_campo()
 
     def construir_campo(self):
@@ -39,8 +40,8 @@ class Chessboard:
         self.reinas.append(reina)
         self.window.update()
 
-    def add_reinas(self, reinas: np.array) -> None:
-        for i in range(reinas.size):
+    def add_reinas(self, reinas: list[int]) -> None:
+        for i in range(len(reinas)):
             x = i
             y = reinas[i]
             
@@ -51,7 +52,7 @@ class Chessboard:
             reina = self.campo.create_image(x1, y1, {'image': self.img_reina})
             self.window.update()
             self.reinas.append(reina)
-            time.sleep(.2)
+            time.sleep(.1)
 
     def draw_attack(self, pos_a: tuple[int, int], pos_b: tuple[int, int]) -> None:
         x1, y1 = pos_a
@@ -62,13 +63,18 @@ class Chessboard:
         x2 = x2 * self.queensize + self.queensize / 2
         y2 = y2 * self.queensize + self.queensize / 2
 
-        self.campo.create_line(x1, y1, x2, y2, fill='red', width=15)
+        ataque = self.campo.create_line(x1, y1, x2, y2, fill='red', width=15)
+        self.ataques.append(ataque)
         self.window.update() 
-        time.sleep(.2)       
+        time.sleep(.1)       
 
     def clear(self):
         for reina in self.reinas:
             self.campo.delete(reina)
+        
+        for ataque in self.ataques:
+            self.campo.delete(ataque)
+        
         self.reinas = []
         self.window.update()
 

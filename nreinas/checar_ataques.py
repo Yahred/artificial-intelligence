@@ -2,11 +2,12 @@ import time
 
 from classes.chessboard import Chessboard
 
-def solve(configuration: list[int], chessboard: Chessboard = None) -> int:
+def checar_ataques(configuration: list[int], chessboard: Chessboard = None) -> int:
+    print(configuration)
     chessboard.add_reinas(configuration)
     numero_ataques = 0
     n_reinas = len(configuration)
-    time.sleep(.5)
+    time.sleep(.1)
 
     for i in range(n_reinas):
         pos_a = configuration[i]
@@ -25,8 +26,9 @@ def solve(configuration: list[int], chessboard: Chessboard = None) -> int:
                     chessboard.draw_attack([i, pos_a], [j, pos_b])
                 numero_ataques += 2
     
+    chessboard.clear()
     return numero_ataques
 
 if __name__ == '__main__':
-    result = solve([0, 0, 0, 0])
+    result = checar_ataques([0, 0, 0, 0])
     print(result)

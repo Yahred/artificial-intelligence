@@ -3,7 +3,7 @@ import tkinter as tk
 import numpy as np
 
 from classes.chessboard import Chessboard
-from solution import solve
+from nreinas.solution import solve
 
 n_reinas = int(input('Introduzca el número de reinas: '))
 

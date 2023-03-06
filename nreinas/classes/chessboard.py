@@ -1,13 +1,13 @@
 import os
+import time
 import tkinter as tk
 import numpy as np
 from PIL import ImageTk
 
 absolute_folder_path = os.path.dirname(os.path.realpath(__file__))
-absolute_image_path = os.path.join(absolute_folder_path, 'assets/reina.gif')
+absolute_image_path = os.path.join(absolute_folder_path, '../assets/reina.gif')
 
 class Chessboard:
-
     def __init__(self, window: tk.Tk, n_reinas: int = 4) -> None:
         self.n_reinas = n_reinas
         self.queensize = 80
@@ -51,6 +51,7 @@ class Chessboard:
             reina = self.campo.create_image(x1, y1, {'image': self.img_reina})
             self.window.update()
             self.reinas.append(reina)
+            time.sleep(.2)
 
     def draw_attack(self, pos_a: tuple[int, int], pos_b: tuple[int, int]) -> None:
         x1, y1 = pos_a
@@ -62,7 +63,8 @@ class Chessboard:
         y2 = y2 * self.queensize + self.queensize / 2
 
         self.campo.create_line(x1, y1, x2, y2, fill='red', width=15)
-        self.window.update()        
+        self.window.update() 
+        time.sleep(.2)       
 
     def clear(self):
         for reina in self.reinas:

@@ -7,7 +7,6 @@ def checar_ataques(configuration: list[int], chessboard: Chessboard = None) -> i
     chessboard.add_reinas(configuration)
     numero_ataques = 0
     n_reinas = len(configuration)
-    time.sleep(.1)
 
     for i in range(n_reinas):
         pos_a = configuration[i]
@@ -26,7 +25,9 @@ def checar_ataques(configuration: list[int], chessboard: Chessboard = None) -> i
                     chessboard.draw_attack([i, pos_a], [j, pos_b])
                 numero_ataques += 2
     
-    chessboard.clear()
+    if(numero_ataques):
+        chessboard.clear()
+    
     return numero_ataques
 
 if __name__ == '__main__':

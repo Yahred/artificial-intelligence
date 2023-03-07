@@ -52,7 +52,6 @@ class Chessboard:
             reina = self.campo.create_image(x1, y1, {'image': self.img_reina})
             self.window.update()
             self.reinas.append(reina)
-            time.sleep(.1)
 
     def draw_attack(self, pos_a: tuple[int, int], pos_b: tuple[int, int]) -> None:
         x1, y1 = pos_a
@@ -66,7 +65,6 @@ class Chessboard:
         ataque = self.campo.create_line(x1, y1, x2, y2, fill='red', width=15)
         self.ataques.append(ataque)
         self.window.update() 
-        time.sleep(.1)       
 
     def clear(self):
         for reina in self.reinas:

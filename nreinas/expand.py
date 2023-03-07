@@ -13,5 +13,5 @@ def expand(configuracion: list[int]) -> list[int]:
     return os
 
 if __name__ == '__main__':
-    test = expand([1,1,1,1])
+    test = expand([0, 0, 0, 0])
     print(test)

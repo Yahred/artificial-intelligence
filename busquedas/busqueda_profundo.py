@@ -5,7 +5,7 @@ def busqueda_profundo(frontera: list[Any], goaltest: Callable[[Any], bool], expa
         return False
 
     estado_actual = frontera.pop(0)
-    print(goaltest(estado_actual))
+
     if goaltest(estado_actual):
         return True
 

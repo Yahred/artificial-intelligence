@@ -7,26 +7,34 @@ from classes.chessboard import Chessboard
 from nreinas.checar_ataques import checar_ataques
 from busquedas.busqueda_ancho import busqueda_ancho
 from busquedas.busqueda_profundo import busqueda_profundo
-from nreinas.expand import expand
+from nreinas.expand import Expand
 
 n_reinas = int(input('Introduzca el número de reinas: '))
 
 window = tk.Tk()
 window.title('N-Reinas ')
+
+def execute(busqueda: callable):
+    chessboard.clear()
+    Expand.restart()
+    
+    inicio = time.time()
+    frontera = np.zeros(n_reinas).tolist()
+
+    busqueda([frontera], lambda estado_actual: not checar_ataques(estado_actual, chessboard), Expand.expand)
+
+    print('Tiempo de ejecución: %.2f seg' % (time.time() - inicio))
+
+boton = tk.Button(text='Búsqueda a lo profundo', command= lambda: execute(busqueda_profundo))
+boton.pack() 
+
+boton = tk.Button(text='Búsqueda a lo ancho', command= lambda: execute(busqueda_ancho))
+boton.pack()
+
 chessboard = Chessboard(window, n_reinas)
 chessboard.pack()
 sys.setrecursionlimit(2000000) 
 
-
-def execute():
-    inicio = time.time()
-    frontera = np.zeros(n_reinas).tolist()
-
-    busqueda_ancho([frontera], lambda estado_actual: not checar_ataques(estado_actual, chessboard), expand)
-
-    print('Tiempo de ejecución: %.2f seg' % (time.time() - inicio))
-
-window.after(1000, execute)
 window.mainloop()
 
 

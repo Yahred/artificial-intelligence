@@ -19,7 +19,7 @@ class Chessboard:
 
     def construir_campo(self):
         size_campo = self.n_reinas * self.queensize
-        self.campo = tk.Canvas(self.window, width=size_campo, height=size_campo )
+        self.campo = tk.Canvas(width=size_campo, height=size_campo )
 
         for i in range(self.n_reinas):
             fill_color_pattern = ['#b58863', '#f0d9b5'] if i % 2 == 0 else ['#f0d9b5', '#b58863']

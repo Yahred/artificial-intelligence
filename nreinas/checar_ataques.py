@@ -3,7 +3,6 @@ import time
 from classes.chessboard import Chessboard
 
 def checar_ataques(configuration: list[int], chessboard: Chessboard = None) -> int:
-    print(configuration)
     chessboard.add_reinas(configuration)
     numero_ataques = 0
     n_reinas = len(configuration)

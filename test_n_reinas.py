@@ -13,6 +13,8 @@ n_reinas = int(input('Introduzca el número de reinas: '))
 
 window = tk.Tk()
 window.title('N-Reinas ')
+ex_time = 0
+
 
 def execute(busqueda: callable):
     chessboard.clear()
@@ -23,10 +25,14 @@ def execute(busqueda: callable):
 
     busqueda([frontera], lambda estado_actual: not checar_ataques(estado_actual, chessboard), Expand.expand)
 
-    print('Tiempo de ejecución: %.2f seg' % (time.time() - inicio))
+    ex_time = time.time() - inicio
+    txt_tiempo['text'] = 'Tiempo de ejecución: %.2f' % ex_time
+
+txt_tiempo = tk.Label(text='Tiempo de ejecución: %.2f' % ex_time)
+txt_tiempo.pack()
 
 boton = tk.Button(text='Búsqueda a lo profundo', command= lambda: execute(busqueda_profundo))
-boton.pack() 
+boton.pack()  
 
 boton = tk.Button(text='Búsqueda a lo ancho', command= lambda: execute(busqueda_ancho))
 boton.pack()

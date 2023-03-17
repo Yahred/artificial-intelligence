@@ -1,6 +1,5 @@
-from typing import Callable
+from typing import Any, Callable
 
-from pyparsing import Any
 from classes.nodo import Nodo 
 
 def busqueda_boraz(frontera: list[Nodo], goaltest: Callable[[Any], bool], expand: Callable[[Any], list[Any]], evaluate: Callable[[Any], list[Any]], sort_func: Callable):

@@ -1,8 +1,6 @@
 import os
-import time
 import tkinter as tk
-import numpy as np
-from PIL import ImageTk
+from PIL import ImageTk, Image
 
 absolute_folder_path = os.path.dirname(os.path.realpath(__file__))
 absolute_image_path = os.path.join(absolute_folder_path, '../assets/reina.gif')
@@ -10,8 +8,9 @@ absolute_image_path = os.path.join(absolute_folder_path, '../assets/reina.gif')
 class Chessboard:
     def __init__(self, window: tk.Tk, n_reinas: int = 4) -> None:
         self.n_reinas = n_reinas
-        self.queensize = 80
-        self.img_reina = tk.PhotoImage(file=absolute_image_path)
+        self.queensize = int(800 / n_reinas)
+        img = Image.open(absolute_image_path).resize((self.queensize, self.queensize))
+        self.img_reina = ImageTk.PhotoImage(img)
         self.window = window
         self.reinas = []
         self.ataques = []
@@ -62,7 +61,7 @@ class Chessboard:
         x2 = x2 * self.queensize + self.queensize / 2
         y2 = y2 * self.queensize + self.queensize / 2
 
-        ataque = self.campo.create_line(x1, y1, x2, y2, fill='red', width=15)
+        ataque = self.campo.create_line(x1, y1, x2, y2, fill='red', width=5)
         self.ataques.append(ataque)
         self.window.update() 
 

@@ -3,7 +3,7 @@ import time
 from classes.chessboard import Chessboard
 
 def checar_ataques(configuration: list[int], chessboard: Chessboard = None) -> int:
-    chessboard.add_reinas(configuration)
+    chessboard and chessboard.add_reinas(configuration)
     numero_ataques = 0
     n_reinas = len(configuration)
 
@@ -14,18 +14,16 @@ def checar_ataques(configuration: list[int], chessboard: Chessboard = None) -> i
             pos_b = configuration[j]
 
             if pos_a == pos_b:
-                if chessboard:
-                    chessboard.draw_attack([i, pos_a], [j, pos_b])
+                chessboard and chessboard.draw_attack([i, pos_a], [j, pos_b])
                 numero_ataques += 2
                 continue
 
             if abs(j - i) == abs(pos_a - pos_b):
-                if chessboard:
-                    chessboard.draw_attack([i, pos_a], [j, pos_b])
+                chessboard and chessboard.draw_attack([i, pos_a], [j, pos_b])
                 numero_ataques += 2
     
     if(numero_ataques):
-        chessboard.clear()
+        chessboard and chessboard.clear()
     
     return numero_ataques
 

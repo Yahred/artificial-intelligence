@@ -7,7 +7,7 @@ from classes.chessboard import Chessboard
 from nreinas.checar_ataques import checar_ataques
 from busquedas.busqueda_ancho import busqueda_ancho
 from busquedas.busqueda_profundo import busqueda_profundo
-from busquedas.busqueda_boraz import busqueda_boraz
+from busquedas.busqueda_voraz import busqueda_voraz
 from nreinas.expand import Expand
 
 n_reinas = int(input('Introduzca el número de reinas: '))
@@ -29,17 +29,17 @@ def execute(busqueda: callable):
     txt_tiempo['text'] = 'Tiempo de ejecución: %.2f' % ex_time
     
     
-def execute_boraz():
+def execute_voraz():
     chessboard.clear()
     Expand.restart()
     
     inicio = time.time()
     frontera = np.zeros(n_reinas).tolist()
     
-    def evaluate(os):
-        return [checar_ataques(conf) for conf in os]
+    def evaluate(conf):
+        return checar_ataques(conf)
     
-    busqueda_boraz([frontera], lambda estado_actual: not checar_ataques(estado_actual, chessboard), Expand.expand, evaluate, lambda conf: checar_ataques(conf))
+    busqueda_voraz([frontera], lambda estado_actual: not checar_ataques(estado_actual, chessboard), Expand.expand, evaluate )
     
     ex_time = time.time() - inicio
     txt_tiempo['text'] = 'Tiempo de ejecución: %.2f' % ex_time
@@ -53,7 +53,7 @@ boton.pack()
 boton = tk.Button(text='Búsqueda a lo ancho', command= lambda: execute(busqueda_ancho))
 boton.pack()
 
-boton = tk.Button(text='Búsqueda Boraz', command= execute_boraz)
+boton = tk.Button(text='Búsqueda voraz', command= execute_voraz)
 boton.pack()
 
 chessboard = Chessboard(window, n_reinas)

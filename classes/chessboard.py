@@ -1,4 +1,5 @@
 import os
+import time
 import tkinter as tk
 from PIL import ImageTk, Image
 
@@ -14,6 +15,7 @@ class Chessboard:
         self.window = window
         self.reinas = []
         self.ataques = []
+        self.dibujar_ataques = False
         self.construir_campo()
 
     def construir_campo(self):
@@ -37,6 +39,7 @@ class Chessboard:
         
         reina = self.campo.create_image(x1, y1, {'image': self.img_reina})
         self.reinas.append(reina)
+        
         self.window.update()
 
     def add_reinas(self, reinas: list[int]) -> None:
@@ -53,6 +56,9 @@ class Chessboard:
             self.reinas.append(reina)
 
     def draw_attack(self, pos_a: tuple[int, int], pos_b: tuple[int, int]) -> None:
+        if not self.dibujar_ataques:
+            return
+        
         x1, y1 = pos_a
         x2, y2 = pos_b
 

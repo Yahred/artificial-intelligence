@@ -3,7 +3,6 @@ from typing import Any, Callable
 from classes.nodo import Nodo 
 
 def busqueda_voraz(frontera: list[Nodo], goaltest: Callable[[Any], bool], expand: Callable[[Any], list[Any]], evaluate: Callable[[Any], list[Any]]):
-    print(frontera)
     if not frontera:
         return False
 

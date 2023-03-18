@@ -29,7 +29,6 @@ estado_inicial = Mapa()
 objetivo = 'Bucharest'
 
 def goal_test(estado_actual: Ciudad):
-    print(estado_actual.nombre)
     return True if estado_actual.nombre == 'Bucharest' else False
 
 def expand(estado_actual: Ciudad):

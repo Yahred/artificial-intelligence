@@ -1,4 +1,5 @@
 import tkinter
+import time
 
 from busquedas.busqueda_voraz import busqueda_voraz
 from classes.map import Map
@@ -61,7 +62,7 @@ with open('data/distancia_bucharest.txt') as f:
         distancias_bucharest[ciudad] = int(distancia)
  
 
-estado_inicial = eforie
+estado_inicial = mehadia
 path = []
 objetivo = 'Bucharest'
 
@@ -87,6 +88,7 @@ mapa_ventana.canvas.pack()
 
 def show_result():
     mapa_ventana.reveal_all()
+    time.sleep(1)
     mapa_ventana.draw_path(path)
 
 root.after(100, show_result)

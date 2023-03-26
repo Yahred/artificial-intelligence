@@ -2,6 +2,7 @@ import tkinter
 import time
 
 from busquedas.busqueda_voraz import busqueda_voraz
+from busquedas.busqueda_a_estrella import busqueda_a_estrella
 from classes.map import Map
 
 from classes.bucharest import Ciudad, Camino
@@ -61,25 +62,35 @@ with open('data/distancia_bucharest.txt') as f:
         ciudad, distancia, *rest = line.split(',')
         distancias_bucharest[ciudad] = int(distancia)
  
-
 estado_inicial = mehadia
 path = []
 objetivo = 'Bucharest'
-
 
 def goal_test(estado_actual: Ciudad):
     path.append(estado_actual)
     return True if estado_actual.nombre == objetivo else False
 
-
-def expand(estado_actual: Ciudad):
-    return [camino.ciudad for camino in estado_actual.hijos]
-
+lista_negra = []
+def expand(estado_actual: Ciudad):      
+    
+    def sumar_distancia_acumulada(camino: Camino):
+        camino.ciudad.distancia_acumulada += camino.distancia
+        camino.ciudad.desde = estado_actual
+        return camino.ciudad
+    
+    return [sumar_distancia_acumulada(camino) for camino in estado_actual.hijos if not camino.ciudad in lista_negra]
 
 def evaluate(child: Ciudad):
-    return distancias_bucharest[child.nombre]
+    return distancias_bucharest[child.nombre] + child.distancia_acumulada
 
-encontrado = busqueda_voraz([estado_inicial], goal_test, expand, evaluate)
+def after_evaluate(estado_actual: Ciudad, os: list[Ciudad]):
+    if os:
+        best_choice = os[0]
+        if best_choice == estado_actual.desde:
+            path.remove(estado_actual)
+            lista_negra.append(estado_actual)
+
+encontrado = busqueda_a_estrella([estado_inicial], goal_test, expand, evaluate, after_evaluate)
 
 root = tkinter.Tk()
 root.title('Viaje')
@@ -91,5 +102,5 @@ def show_result():
     time.sleep(1)
     mapa_ventana.draw_path(path)
 
-root.after(100, show_result)
+root.after(100, show_result) 
 root.mainloop()

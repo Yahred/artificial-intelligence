@@ -9,7 +9,7 @@ absolute_image_path = os.path.join(absolute_folder_path, '../assets/reina.gif')
 class Chessboard:
     def __init__(self, window: tk.Tk, n_reinas: int = 4) -> None:
         self.n_reinas = n_reinas
-        self.queensize = int(800 / n_reinas)
+        self.queensize = int(400 / n_reinas)
         img = Image.open(absolute_image_path).resize((self.queensize, self.queensize))
         self.img_reina = ImageTk.PhotoImage(img)
         self.window = window

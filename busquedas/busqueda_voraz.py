@@ -1,4 +1,5 @@
 from typing import Any, Callable
+from random import randint
 
 from classes.nodo import Nodo
 
@@ -14,6 +15,15 @@ def busqueda_voraz(frontera: list[Nodo], goaltest: Callable[[Any], bool], expand
     os = expand(estado_actual)
     os.sort(key=evaluate)
 
-    frontera = [os[0]]
+    ganador = None
+    if os:
+        valor_ganador = min([evaluate(child) for child in os])
+
+        empatados = [child for child in os if evaluate(child) == valor_ganador]
+
+        ganador = empatados[randint(0, len(empatados) - 1)]
+        print(ganador)
+
+    frontera = [ganador] if ganador else []
 
     return busqueda_voraz(frontera, goaltest, expand, evaluate)

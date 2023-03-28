@@ -20,7 +20,7 @@ def checar_ataques(configuration: list[int], chessboard=None) -> int:
 
     return numero_ataques
 
-
+visitados = []
 def expand_voraz(configuracion: list[int]) -> list[int]:
     os = []
 
@@ -31,8 +31,9 @@ def expand_voraz(configuracion: list[int]) -> list[int]:
 
             if configuracion_clon[x] + (y + 1) < n_reinas:
                 configuracion_clon[x] += y + 1
-                os.append(configuracion_clon)
+                configuracion_clon not in visitados and os.append(configuracion_clon)
 
+    visitados.append(configuracion)
     return os
 
 

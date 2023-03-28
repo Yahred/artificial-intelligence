@@ -43,8 +43,11 @@ def execute_voraz():
     def evaluate(conf):
         return checar_ataques(conf)
 
-    busqueda_voraz([frontera], lambda estado_actual: not checar_ataques(
-        estado_actual, chessboard),expand_voraz, evaluate)
+    ganador = busqueda_voraz([frontera], lambda estado_actual: not checar_ataques(
+        estado_actual),expand_voraz, evaluate)
+
+    if ganador:
+        chessboard.add_reinas(ganador)
 
     ex_time = time.time() - inicio
     txt_tiempo['text'] = 'Tiempo de ejecución: %.2f' % ex_time

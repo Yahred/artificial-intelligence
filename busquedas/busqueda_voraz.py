@@ -10,11 +10,10 @@ def busqueda_voraz(frontera: list[Nodo], goaltest: Callable[[Any], bool], expand
 
     estado_actual = frontera.pop(0)
     if goaltest(estado_actual):
-        return True
+        return estado_actual
 
     os = expand(estado_actual)
-    os.sort(key=evaluate)
-
+    
     ganador = None
     if os:
         valor_ganador = min([evaluate(child) for child in os])

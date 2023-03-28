@@ -6,7 +6,7 @@ from classes.bucharest import Ciudad, Camino
 
 class Map:
 
-    def __init__(self, mapa: Ciudad) -> tkinter.Canvas:
+    def __init__(self, mapa: Ciudad):
         self.width = 700
         self.height = 600
         self.canvas = tkinter.Canvas(width=self.width, height=self.height)
@@ -42,6 +42,9 @@ class Map:
 
             self.dibujados.append(city)
             self.draw_map(city)
+
+    def initial_animation(self):
+        pass
 
     def clear_map(self):
         for item in self.map_drawed:
@@ -116,7 +119,7 @@ class Map:
                     if abs(y_act - y):
                         y_act += (self.animation_speed * direction_y)
                     self.canvas.update()
-                    time.sleep(0.002)
+                    time.sleep(0.0001)
 
             x_ant = x
             y_ant = y

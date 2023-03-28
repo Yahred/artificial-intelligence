@@ -40,7 +40,9 @@ def expand_voraz(configuracion: list[int]) -> list[int]:
 if __name__ == '__main__':
     os = expand_voraz([0, 0, 0, 0])
 
+    print(len(os))
     print(os)
+    
     print([checar_ataques(conf) for conf in os])
 
     os.sort(key=lambda conf: checar_ataques(conf))

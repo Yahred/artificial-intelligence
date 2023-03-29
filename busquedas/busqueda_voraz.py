@@ -22,7 +22,6 @@ def busqueda_voraz(frontera: list[Nodo], goaltest: Callable[[Any], bool], expand
     os.sort(key=lambda child: child['eval'])
 
     ganador = os[0]['eval']
-    print(ganador)
 
     empatados = 0
     for child in os:

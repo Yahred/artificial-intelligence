@@ -9,28 +9,29 @@ from classes.chessboard import Chessboard
 
 n_reinas = int(input('Introduzca el número de Reinas: '))
 
+inicio = time.time()
+frontera = np.zeros(n_reinas).tolist()
 
-def execute():
-    inicio = time.time()
-    frontera = np.zeros(n_reinas).tolist()
 
-    def evaluate(conf):
-        return checar_ataques(conf)
+def evaluate(conf):
+    return checar_ataques(conf)
 
-    ganador = busqueda_voraz([frontera], lambda estado_actual: not checar_ataques(
-        estado_actual), expand_voraz, evaluate)
+def goal_test(estado_actual):
+    numero_ataques = checar_ataques(estado_actual)
+    print(numero_ataques)
+    return not numero_ataques
 
-    if ganador:
-        chessboard.add_reinas(ganador)
+ganador = busqueda_voraz([frontera], goal_test, expand_voraz, evaluate)
 
-    ex_time = time.time() - inicio
-    print('Tiempo de ejecución: %.2f' % ex_time)
-
+ex_time = time.time() - inicio
+print('Tiempo de ejecución: %.2f' % ex_time)
 
 root = tkinter.Tk()
 
 chessboard = Chessboard(root, n_reinas)
 chessboard.pack()
 
-root.after(1, execute)
+if ganador:
+    chessboard.add_reinas(ganador)
+
 root.mainloop()

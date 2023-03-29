@@ -4,10 +4,7 @@ class Expand:
     def restart():
         Expand.visitados = []
 
-    def expand(configuracion: list[int]) -> list[int]:
-        if configuracion in Expand.visitados:
-            return []
-      
+    def expand(configuracion: list[int], lista_negra = True) -> list[int]:
         os = []
 
         n_reinas = len(configuracion)
@@ -15,9 +12,9 @@ class Expand:
             configuracion_clon = configuracion.copy()
             if configuracion_clon[x] + 1 < n_reinas:
                 configuracion_clon[x] += 1
-                os.append(configuracion_clon)
+                lista_negra and configuracion_clon not in Expand.visitados and os.append(configuracion_clon)
 
-        Expand.visitados.append(configuracion)
+        lista_negra and Expand.visitados.append(configuracion)
         return os
 
 

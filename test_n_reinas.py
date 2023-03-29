@@ -2,6 +2,7 @@ import time
 import tkinter as tk
 import numpy as np
 import sys
+from busquedas.profundidad_iterada import profundidad_iterada
 
 from classes.chessboard import Chessboard
 from classes.nodo import Nodo
@@ -27,20 +28,26 @@ def preparar_busqueda():
 
     return frontera, inicio
 
+
+def desplegar_tiempo(inicio):
+    ex_time = time.time() - inicio
+    txt_tiempo['text'] = 'Tiempo de ejecución: %.2f' % ex_time
+
+
 def execute(busqueda: callable):
     frontera, inicio = preparar_busqueda()
 
     busqueda([frontera], lambda estado_actual: not checar_ataques(
         estado_actual, chessboard), Expand.expand)
 
-    ex_time = time.time() - inicio
-    txt_tiempo['text'] = 'Tiempo de ejecución: %.2f' % ex_time
+    desplegar_tiempo(inicio)
+
 
 def execute_limitado():
     frontera, inicio = preparar_busqueda()
-    
+
     frontera_limitado = [Nodo(valor=frontera)]
-    
+
     def expand(estado_actual: Nodo):
         return [Nodo(conf) for conf in Expand.expand(estado_actual.valor)]
 
@@ -49,10 +56,31 @@ def execute_limitado():
 
     limite = n_reinas + 1
 
-    profundidad_limitada(frontera_limitado, expand=expand, goaltest=goal_test, lim=limite)
-    
-    ex_time = time.time() - inicio
-    txt_tiempo['text'] = 'Tiempo de ejecución: %.2f' % ex_time
+    profundidad_limitada(frontera_limitado, expand=expand,
+                         goaltest=goal_test, lim=limite)
+
+    desplegar_tiempo(inicio)
+
+
+def execute_iterado():
+    frontera, inicio = preparar_busqueda()
+
+    frontera_limitado = [Nodo(valor=frontera)]
+
+    def expand(estado_actual: Nodo):
+        return [Nodo(conf) for conf in Expand.expand(estado_actual.valor)]
+
+    def goal_test(estado_actual: Nodo):
+        return not checar_ataques(estado_actual.valor, chessboard)
+
+    def cambio_nivel():
+        Expand.visitados.clear()
+
+    profundidad_iterada(frontera_limitado, expand=expand,
+                        goaltest=goal_test, cambio_nivel=cambio_nivel)
+
+    desplegar_tiempo(inicio)
+
 
 txt_tiempo = tk.Label(text='Tiempo de ejecución: %.2f' % ex_time)
 txt_tiempo.pack()
@@ -67,6 +95,10 @@ boton.pack()
 
 boton = tk.Button(text='Búsqueda con profundidad Limitada',
                   command=execute_limitado)
+boton.pack()
+
+boton = tk.Button(text='Búsqueda con profundidad Iterada',
+                  command=execute_iterado)
 boton.pack()
 
 chessboard = Chessboard(window, n_reinas)

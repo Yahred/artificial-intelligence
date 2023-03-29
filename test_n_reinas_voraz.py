@@ -13,7 +13,6 @@ n_reinas = int(input('Introduzca el número de Reinas: '))
 def execute():
     inicio = time.time()
     frontera = np.zeros(n_reinas).tolist()
-    ex_time = time.time() - inicio
 
     def evaluate(conf):
         return checar_ataques(conf)
@@ -24,6 +23,7 @@ def execute():
     if ganador:
         chessboard.add_reinas(ganador)
 
+    ex_time = time.time() - inicio
     print('Tiempo de ejecución: %.2f' % ex_time)
 
 

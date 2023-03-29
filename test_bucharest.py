@@ -62,7 +62,7 @@ with open('data/distancia_bucharest.txt') as f:
         ciudad, distancia, *rest = line.split(',')
         distancias_bucharest[ciudad] = int(distancia)
  
-estado_inicial = mehadia
+estado_inicial = timisoara
 path = []
 objetivo = 'Bucharest'
 

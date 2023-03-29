@@ -5,6 +5,7 @@ from classes.nodo import Nodo
 
 
 def busqueda_voraz(frontera: list[Nodo], goaltest: Callable[[Any], bool], expand: Callable[[Any], list[Any]], evaluate: Callable[[Any], list[Any]]):
+    
     if not frontera:
         return False
 
@@ -12,17 +13,23 @@ def busqueda_voraz(frontera: list[Nodo], goaltest: Callable[[Any], bool], expand
     if goaltest(estado_actual):
         return estado_actual
 
-    os = expand(estado_actual)
-    
-    ganador = None
-    if os:
-        valor_ganador = min([evaluate(child) for child in os])
+    os = [{'child': child, 'eval': evaluate(child)}
+          for child in expand(estado_actual)]
 
-        empatados = [child for child in os if evaluate(child) == valor_ganador]
+    if not os:
+        return busqueda_voraz([], goaltest, expand, evaluate)
 
-        ganador = empatados[randint(0, len(empatados) - 1)]
-        print(ganador)
+    os.sort(key=lambda child: child['eval'])
 
-    frontera = [ganador] if ganador else []
+    ganador = os[0]['eval']
+    print(ganador)
+
+    empatados = 0
+    for child in os:
+        if child['eval'] != ganador:
+            break
+        empatados += 1
+
+    frontera = [os[randint(0, empatados - 1)]['child']]
 
     return busqueda_voraz(frontera, goaltest, expand, evaluate)

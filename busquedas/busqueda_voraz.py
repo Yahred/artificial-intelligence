@@ -30,6 +30,6 @@ def busqueda_voraz(frontera: list[Nodo], goaltest: Callable[[Any], bool], expand
             break
         empatados += 1
 
-    frontera = [os[randint(0, empatados - 1)]['child']]
+    frontera = [ os[randint(0, empatados - 1)]['child'] ]
 
     return busqueda_voraz(frontera, goaltest, expand, evaluate)

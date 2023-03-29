@@ -5,6 +5,9 @@ class Expand:
         Expand.visitados = []
 
     def expand(configuracion: list[int]) -> list[int]:
+        if configuracion in Expand.visitados:
+            return []
+      
         os = []
 
         n_reinas = len(configuracion)
@@ -14,6 +17,7 @@ class Expand:
                 configuracion_clon[x] += 1
                 os.append(configuracion_clon)
 
+        Expand.visitados.append(configuracion)
         return os
 
 

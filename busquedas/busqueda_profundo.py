@@ -1,15 +1,15 @@
-from classes.nodo import Nodo
-from utilities.expand import expand
+from typing import Any, Callable
 
-def busqueda_profundo(frontera: list[Nodo], objetivo: Nodo): 
+def busqueda_profundo(frontera: list[Any], goaltest: Callable[[Any], bool], expand: Callable[[Any], list[Any]]): 
     if not frontera:
         return False
 
     estado_actual = frontera.pop(0)
-    if estado_actual.valor == objetivo.valor:
+
+    if goaltest(estado_actual):
         return True
 
     os = expand(estado_actual)
     frontera = os + frontera
 
-    return busqueda_profundo(frontera, objetivo)
+    return busqueda_profundo(frontera, goaltest, expand)

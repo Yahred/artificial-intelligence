@@ -1,6 +1,9 @@
 import tkinter as tk
 import random
 
+n_cuadros = int(input('Introduzca el tamaño del laberinto: '))
+obsta_percent = int(input('Introduzca el porcentaje de obstaculos: '))
+
 class Grid(tk.Frame):
     
     def __init__(self, parent, rows, columns, size):
@@ -21,14 +24,11 @@ class Grid(tk.Frame):
         self.add_random_obstacles()
         self.draw_obstacles()
 
-        ##self.entry1=tk.Entry(self.ventana1, width=10, textvariable=self.dato)
-        
-
-
         self.pack()
 
     def add_random_obstacles(self):
-        for i in range(50):
+        self.num_obstaculos = int((n_cuadros*n_cuadros)*(obsta_percent/100))
+        for i in range(self.num_obstaculos):
             x = random.randint(0, len(self.grid_cells) - 1)
             y = random.randint(0, len(self.grid_cells[0]) - 1)
             if (x, y) not in self.obstacles and (x, y) != (0, 0):
@@ -37,27 +37,12 @@ class Grid(tk.Frame):
     def draw_obstacles(self):
         for obstacle in self.obstacles:
             x, y = obstacle
-            self.grid_cells[x][y].create_rectangle(0, 0, 40, 20, fill="red")
+            self.grid_cells[x][y].create_rectangle(0, 0, n_cuadros, n_cuadros, fill="red")
 
 root = tk.Tk()
 root.title("Laberinto")
 
-w = 800 # width for the Tk root
-h = 800 # height for the Tk root
 
-# get screen width and height
-ws = root.winfo_screenwidth() # width of the screen
-hs = root.winfo_screenheight() # height of the screen
-
-# calculate x and y coordinates for the Tk root window
-x = (ws/2) - (w/2)
-y = (hs/2) - (h/2)
-
-# set the dimensions of the screen 
-# and where it is placed
-root.geometry('%dx%d+%d+%d' % (w, h, x, y))
-
-
-grid = Grid(root, rows=30, columns=30, size=20)
+grid = Grid(root, rows=n_cuadros, columns=n_cuadros, size=(600/n_cuadros))
 
 root.mainloop()

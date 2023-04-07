@@ -1,29 +1,14 @@
+import os
 from tkinter import Canvas
 from random import randint
+from time import sleep
+from PIL import ImageTk, Image
 
-
-class Visitante:
-
-    def __init__(self, x: int, y: int, size: int) -> None:
-        self.casilla_size = size
-        self.r = size / 2
-        self.canvas_id = None
-        self.color = 'cyan'
-        self.starting_x = x
-        self.starting_y = y
-        self.current_x = x
-        self.current_y = y
-
-    def dibujar(self, canvas: Canvas):
-        self.canvas_id and canvas.delete(self.canvas_id)
-
-        offset = self.casilla_size / 4
-
-        x1 = (self.current_x * self.casilla_size) + offset
-        y1 = (self.current_y * self.casilla_size) + offset
-
-        canvas.create_oval(
-            x1, y1, x1 + self.r, y1 + self.r, fill=self.color)
+absolute_folder_path = os.path.dirname(os.path.realpath(__file__))
+absolute_tierra_path = os.path.join(
+    absolute_folder_path, '../assets/tierra.gif')
+absolute_arbusto_path = os.path.join(
+    absolute_folder_path, '../assets/arbusto.gif')
 
 
 class Casilla:
@@ -61,10 +46,61 @@ class Casilla:
         self.es_objetivo = True
         self.dibujar(canvas, size)
 
-    def marcar_recorrido(self, canvas:Canvas, size: int):
+    def marcar_recorrido(self, canvas: Canvas, size: int):
         self.recorrida = True
         self.dibujar(canvas, size)
 
+class Visitante:
+
+    def __init__(self) -> None:
+        self.color = 'cyan'
+        self.velocidad = 1
+        self.canvas_id = None
+        self.ruta: list[Casilla] = []
+
+    def definir_posicion_inicial(self, casilla: Casilla, canvas: Canvas, size: int):
+        self.canvas = canvas
+        self.casilla_actual = casilla
+        self.casilla_size = size
+        self.offset = self.casilla_size / 4
+        self.r = size / 2
+        self.x = casilla.x
+        self.y = casilla.y
+        self.current_x = (self.x * self.casilla_size) + self.offset
+        self.current_y = (self.y * self.casilla_size) + self.offset
+
+    def dibujar(self):
+        self.canvas_id and self.canvas.delete(self.canvas_id)
+
+        self.canvas_id = self.canvas.create_oval(
+            self.current_x, self.current_y, self.current_x + self.r, self.current_y + self.r, fill=self.color)
+
+    def caminar(self, x_objetivo: int, y_objetivo: int):
+        x_objetivo_coord = (x_objetivo * self.casilla_size) + self.offset
+        y_objetivo_coord = (y_objetivo * self.casilla_size) + self.offset
+
+        direccion_x = 1 if self.current_x < x_objetivo_coord else -1
+        direccion_y = 1 if self.current_y < y_objetivo_coord else -1
+
+        while self.current_x != x_objetivo_coord or self.current_y != y_objetivo_coord:
+            if self.current_x != x_objetivo_coord:
+                self.current_x = self.current_x + \
+                    (self.velocidad * direccion_x)
+
+            if self.current_y != y_objetivo_coord:
+                self.current_y = self.current_y + \
+                    (self.velocidad * direccion_y)
+
+            self.dibujar()
+            self.canvas.update()
+            sleep(0.01)
+
+    def agregar_ruta(self, casilla: Casilla):
+        self.ruta.append(casilla)
+
+    def animar_recorrido(self):
+        for casilla in self.ruta:
+            self.caminar(casilla.x, casilla.y)
 
 class Laberinto:
 
@@ -78,10 +114,10 @@ class Laberinto:
         self.casillas: list[list[Casilla]] = []
         self.construir_laberinto()
         self.asignar_bloqueos()
-        self.visitante = None
+        self.visitantes = []
+        self.casilla_objetivo = None
         self.definir_objetivo()
-        self.definir_visitante()
-        self.ruta = []
+        self.ruta: list[Casilla] = []
 
     def pack(self):
         self.canvas.pack()
@@ -131,9 +167,11 @@ class Laberinto:
             self.casillas[random_x][random_y].hacer_objetivo(
                 self.canvas, self.casilla_size)
 
+            self.casilla_objetivo = self.casillas[random_x][random_y]
+
             break
 
-    def definir_visitante(self):
+    def agregar_visitante(self, visitante: Visitante):
         if self.bloqueos_existentes >= self.numero_casillas * self.numero_casillas:
             return
 
@@ -146,38 +184,21 @@ class Laberinto:
             if casilla.bloqueada or casilla.es_objetivo:
                 continue
 
-            print(random_x, random_y)
-            self.visitante = Visitante(random_x, random_y, self.casilla_size)
-            self.visitante.dibujar(self.canvas)
-            break
-
-
-    def obtener_rangos_vecinos(self, punto: int):
-        izq = punto - 1 if punto - 1 >= 0 else 0
-        der = punto + 1 if punto + 1 < self.numero_casillas else self.numero_casillas - 1
-
-        return izq, der
+            visitante.definir_posicion_inicial(casilla, self.canvas, self.casilla_size)
+            visitante.dibujar()
+            self.visitantes.append(visitante)
+            return
 
     def obtener_vecinos_casilla(self, x: int, y: int):
-        rango_izq_x, rango_der_x = self.obtener_rangos_vecinos(x)
-        rango_izq_y, rango_der_y = self.obtener_rangos_vecinos(y)
+        vecinos = []
 
-        vecinos: list[Casilla] = []
-        for x in range(rango_izq_x, rango_der_x + 1):
-            for y in range(rango_izq_y, rango_der_y + 1):
-                casilla = self.casillas[x][y]
-
-                if casilla.bloqueada:
-                    continue
-
-                vecinos.append(casilla)
+        x - 1 >= 0 and not self.casillas[x -
+                                         1][y].bloqueada and vecinos.append(self.casillas[x-1][y])
+        y - 1 >= 0 and not self.casillas[x][y -
+                                            1].bloqueada and vecinos.append(self.casillas[x][y-1])
+        x + 1 < self.numero_casillas and not self.casillas[x +
+                                                           1][y].bloqueada and vecinos.append(self.casillas[x+1][y])
+        y + 1 < self.numero_casillas and not self.casillas[x][y +
+                                                              1].bloqueada and vecinos.append(self.casillas[x][y+1])
 
         return vecinos
-    
-    def trazar_ruta(self, casilla: Casilla):
-        self.ruta.append(casilla)
-        for casilla in self.ruta:
-            if casilla.recorrida:
-                continue
-
-            casilla.marcar_recorrido(self.canvas, self.casilla_size)

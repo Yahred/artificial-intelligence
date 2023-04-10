@@ -105,7 +105,7 @@ class Visitante:
 class Laberinto:
 
     def __init__(self, porcentaje_obstaculos) -> None:
-        self.casilla_size = 40
+        self.casilla_size = 20
         self.numero_casillas = 20
         self.porcentaje_obstaculos = porcentaje_obstaculos
         self.canvas = Canvas(width=self.casilla_size * self.numero_casillas,

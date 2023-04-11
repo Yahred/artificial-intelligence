@@ -11,6 +11,10 @@ def profundidad_iterada(frontera: list[Any], goaltest: Callable[[Any], bool], ex
     while not encontrado:
         encontrado = profundidad_limitada(
             frontera.copy(), goaltest, expand, lim)
+        
+        if encontrado:
+            break
+        
         cambio_nivel and cambio_nivel()
         lim += 2
 

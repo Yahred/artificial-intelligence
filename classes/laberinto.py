@@ -50,6 +50,7 @@ class Casilla:
         self.recorrida = True
         self.dibujar(canvas, size)
 
+
 class Visitante:
 
     def __init__(self) -> None:
@@ -57,9 +58,11 @@ class Visitante:
         self.velocidad = 1
         self.canvas_id = None
         self.ruta: list[Casilla] = []
+        self.casilla_inicial = None
 
     def definir_posicion_inicial(self, casilla: Casilla, canvas: Canvas, size: int):
         self.canvas = canvas
+        self.casilla_inicial = casilla
         self.casilla_actual = casilla
         self.casilla_size = size
         self.offset = self.casilla_size / 4
@@ -101,6 +104,11 @@ class Visitante:
     def animar_recorrido(self):
         for casilla in self.ruta:
             self.caminar(casilla.x, casilla.y)
+
+    def limpiar_recorrido(self):
+        self.casilla_actual = self.casilla_inicial
+        self.ruta = []
+
 
 class Laberinto:
 
@@ -184,7 +192,8 @@ class Laberinto:
             if casilla.bloqueada or casilla.es_objetivo:
                 continue
 
-            visitante.definir_posicion_inicial(casilla, self.canvas, self.casilla_size)
+            visitante.definir_posicion_inicial(
+                casilla, self.canvas, self.casilla_size)
             visitante.dibujar()
             self.visitantes.append(visitante)
             return

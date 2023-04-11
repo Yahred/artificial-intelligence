@@ -99,7 +99,7 @@ mapa_ventana.canvas.pack()
 
 def show_result():
     mapa_ventana.reveal_all()
-    time.sleep(1)
+    time.sleep(1) 
     mapa_ventana.draw_path(path)
 
 root.after(100, show_result) 

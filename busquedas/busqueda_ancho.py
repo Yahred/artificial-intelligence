@@ -5,6 +5,7 @@ def busqueda_ancho(frontera: list[Any], goaltest: Callable[[Any], bool], expand:
         return False
 
     estado_actual = frontera.pop(0)
+    
     if goaltest(estado_actual):
         return True
 

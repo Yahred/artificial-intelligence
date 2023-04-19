@@ -5,10 +5,7 @@ from time import sleep
 from PIL import ImageTk, Image
 
 absolute_folder_path = os.path.dirname(os.path.realpath(__file__))
-absolute_tierra_path = os.path.join(
-    absolute_folder_path, '../assets/tierra.gif')
-absolute_arbusto_path = os.path.join(
-    absolute_folder_path, '../assets/arbusto.gif')
+absolute_image_path = os.path.join(absolute_folder_path, '../assets/raton.png')
 
 
 class Casilla:
@@ -53,14 +50,15 @@ class Casilla:
 
 class Visitante:
 
-    def __init__(self) -> None:
+    def __init__(self, img=None) -> None:
         self.color = 'cyan'
         self.velocidad = 1
         self.canvas_id = None
         self.ruta: list[Casilla] = []
         self.casilla_inicial = None
+        self.distancia_caminada = 0
 
-    def definir_posicion_inicial(self, casilla: Casilla, canvas: Canvas, size: int):
+    def definir_posicion_inicial(self, casilla: Casilla, canvas: Canvas, size: int, img=None):
         self.canvas = canvas
         self.casilla_inicial = casilla
         self.casilla_actual = casilla
@@ -69,18 +67,28 @@ class Visitante:
         self.r = size / 2
         self.x = casilla.x
         self.y = casilla.y
-        self.current_x = (self.x * self.casilla_size) + self.offset
-        self.current_y = (self.y * self.casilla_size) + self.offset
+        self.current_x = (self.x * self.casilla_size) + \
+            (self.offset * bool(not img))
+        self.current_y = (self.y * self.casilla_size) + \
+            (self.offset * bool(not img))
+        self.img = img
 
     def dibujar(self):
         self.canvas_id and self.canvas.delete(self.canvas_id)
+
+        if self.img:
+            self.canvas_id = self.canvas.create_image(
+                self.current_x, self.current_y, image=self.img)
+            return
 
         self.canvas_id = self.canvas.create_oval(
             self.current_x, self.current_y, self.current_x + self.r, self.current_y + self.r, fill=self.color)
 
     def caminar(self, x_objetivo: int, y_objetivo: int):
-        x_objetivo_coord = (x_objetivo * self.casilla_size) + self.offset
-        y_objetivo_coord = (y_objetivo * self.casilla_size) + self.offset
+        x_objetivo_coord = (x_objetivo * self.casilla_size) + \
+            self.offset 
+        y_objetivo_coord = (y_objetivo * self.casilla_size) + \
+            self.offset
 
         direccion_x = 1 if self.current_x < x_objetivo_coord else -1
         direccion_y = 1 if self.current_y < y_objetivo_coord else -1
@@ -112,8 +120,8 @@ class Visitante:
 
 class Laberinto:
 
-    def __init__(self, porcentaje_obstaculos) -> None:
-        self.casilla_size = 20
+    def __init__(self, porcentaje_obstaculos, casilla_size: int = 20, raton=False) -> None:
+        self.casilla_size = casilla_size
         self.numero_casillas = 20
         self.porcentaje_obstaculos = porcentaje_obstaculos
         self.canvas = Canvas(width=self.casilla_size * self.numero_casillas,
@@ -126,6 +134,10 @@ class Laberinto:
         self.casilla_objetivo = None
         self.definir_objetivo()
         self.ruta: list[Casilla] = []
+        self.raton = raton
+        img = Image.open(absolute_image_path).resize(
+            (self.casilla_size, self.casilla_size))
+        self.img_raton = ImageTk.PhotoImage(img)
 
     def pack(self):
         self.canvas.pack()
@@ -193,7 +205,7 @@ class Laberinto:
                 continue
 
             visitante.definir_posicion_inicial(
-                casilla, self.canvas, self.casilla_size)
+                casilla, self.canvas, self.casilla_size, self.img_raton if self.raton else None)
             visitante.dibujar()
             self.visitantes.append(visitante)
             return

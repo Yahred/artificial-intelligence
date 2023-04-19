@@ -5,6 +5,7 @@ visitados = []
 def expand_voraz(configuracion: list[int]) -> list[int]:
     os = []
     n_reinas = len(configuracion)
+    
     visitados.append(configuracion)
 
     for x in range(1, n_reinas):

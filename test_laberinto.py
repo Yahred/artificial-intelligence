@@ -141,5 +141,4 @@ boton_iniciar.pack()
 
 laberinto = Laberinto(porcentaje_obstaculos)
 laberinto.pack()
-
 root.mainloop()

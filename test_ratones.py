@@ -50,8 +50,8 @@ def iniciar_competicion():
             casilla, visitante), lambda casilla: expand(casilla, visitante), evaluate=lambda casilla: evaluate(casilla, visitante))
         visitante.animar_recorrido()
 
-    hilos.append(Thread(target=competir, args=(visitante_a,)).start())
-    hilos.append(Thread(target=competir, args=(visitante_b,)).start())
+    hilos.append(Thread(target=competir, args=(visitante_a)).start())
+    hilos.append(Thread(target=competir, args=(visitante_b)).start())
     
 laberinto.pack()
 root.after(1000, iniciar_competicion)

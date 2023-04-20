@@ -12,7 +12,7 @@ def busqueda_a_estrella(frontera: list[any], goaltest: Callable[[any], bool], ex
     os = expand(estado_actual)
     os.sort(key=evaluate)
 
-    after_evaluate and after_evaluate(estado_actual, os)
+    os and after_evaluate and after_evaluate(estado_actual, os)
 
     frontera = os + frontera
 

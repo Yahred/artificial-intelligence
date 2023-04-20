@@ -1,3 +1,4 @@
+import sys
 from tkinter import ttk
 import tkinter
 
@@ -59,7 +60,7 @@ def ejecutar_busqueda(metodo_busqueda: callable):
 
     metodo_busqueda([visitante.casilla_actual], lambda casilla: goal_test(
         casilla, visitante), lambda casilla: expand(casilla, visitante))
-    visitante.animar_recorrido()
+    visitante.mostrar_ruta()
 
 
 def ejecutar_profundidad_limitada():
@@ -70,7 +71,7 @@ def ejecutar_profundidad_limitada():
     lim = 10
     profundidad_limitada(
         [estado_inicial], lambda hijo: goaltest_profundidad_limitada(hijo, visitante), lambda hijo: expand_profundidad_limitada(hijo, visitante), lim)
-    visitante.animar_recorrido()
+    visitante.mostrar_ruta()
 
 
 def ejecutar_profundidad_iterada():
@@ -80,7 +81,7 @@ def ejecutar_profundidad_iterada():
     estado_inicial = Nodo(valor=visitante.casilla_actual)
     profundidad_iterada([estado_inicial], lambda hijo: goaltest_profundidad_limitada(
         hijo, visitante), lambda hijo: expand_profundidad_limitada(hijo, visitante), lambda: visitante.limpiar_recorrido())
-    visitante.animar_recorrido()
+    visitante.mostrar_ruta()
     
 def ejecutar_voraz():
     visitante = Visitante()
@@ -90,7 +91,7 @@ def ejecutar_voraz():
     busqueda_voraz([visitante.casilla_actual], lambda casilla: goal_test(
         casilla, visitante), lambda casilla: expand(casilla, visitante), evaluate)
 
-    visitante.animar_recorrido()    
+    visitante.mostrar_ruta()    
 
 def ejecutar_a_estrella():
     visitante = Visitante()
@@ -98,7 +99,7 @@ def ejecutar_a_estrella():
     
     busqueda_a_estrella([visitante.casilla_actual], lambda casilla: goal_test(
         casilla, visitante), lambda casilla: expand(casilla, visitante), evaluate)
-    visitante.animar_recorrido()
+    visitante.mostrar_ruta()
 
 
 def iniciar():
@@ -109,7 +110,7 @@ def iniciar():
 
     ejecucion_busquedas[busqueda_seleccionada]()
 
-
+sys.setrecursionlimit(5000)
 porcentaje_obstaculos = int(input('Introduzca el porcentaje de obstaculos: '))
 
 root = tkinter.Tk()
@@ -140,5 +141,6 @@ boton_iniciar = ttk.Button(text='Iniciar recorrido', command=iniciar)
 boton_iniciar.pack()
 
 laberinto = Laberinto(porcentaje_obstaculos)
+laberinto.definir_objetivo()
 laberinto.pack()
 root.mainloop()

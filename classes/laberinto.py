@@ -5,7 +5,7 @@ from time import sleep
 from PIL import ImageTk, Image
 
 absolute_folder_path = os.path.dirname(os.path.realpath(__file__))
-absolute_image_path = os.path.join(absolute_folder_path, '../assets/raton.png')
+absolute_image_path = os.path.join(absolute_folder_path, '../assets/raton.gif')
 
 
 class Casilla:
@@ -41,6 +41,7 @@ class Casilla:
 
     def hacer_objetivo(self, canvas: Canvas, size: int):
         self.es_objetivo = True
+        self.bloqueada = False
         self.dibujar(canvas, size)
 
     def marcar_recorrido(self, canvas: Canvas, size: int):
@@ -57,6 +58,7 @@ class Visitante:
         self.ruta: list[Casilla] = []
         self.casilla_inicial = None
         self.distancia_caminada = 0
+        self.lista_negra: list[Casilla] = []
 
     def definir_posicion_inicial(self, casilla: Casilla, canvas: Canvas, size: int, img=None):
         self.canvas = canvas
@@ -86,7 +88,7 @@ class Visitante:
 
     def caminar(self, x_objetivo: int, y_objetivo: int):
         x_objetivo_coord = (x_objetivo * self.casilla_size) + \
-            self.offset 
+            self.offset
         y_objetivo_coord = (y_objetivo * self.casilla_size) + \
             self.offset
 
@@ -108,6 +110,23 @@ class Visitante:
 
     def agregar_ruta(self, casilla: Casilla):
         self.ruta.append(casilla)
+
+    def mostrar_ruta(self):
+        for casilla in self.ruta:
+            x_objetivo = casilla.x
+            y_objetivo = casilla.y
+            
+            x_objetivo_coord = (x_objetivo * self.casilla_size) + \
+                self.offset
+            y_objetivo_coord = (y_objetivo * self.casilla_size) + \
+            self.offset
+
+            self.current_x = x_objetivo_coord
+            self.current_y = y_objetivo_coord
+            
+            self.dibujar()
+            self.canvas.update()
+            sleep(0.2)
 
     def animar_recorrido(self):
         for casilla in self.ruta:
@@ -132,7 +151,6 @@ class Laberinto:
         self.asignar_bloqueos()
         self.visitantes = []
         self.casilla_objetivo = None
-        self.definir_objetivo()
         self.ruta: list[Casilla] = []
         self.raton = raton
         img = Image.open(absolute_image_path).resize(
@@ -173,6 +191,10 @@ class Laberinto:
                 self.canvas, self.casilla_size)
             self.bloqueos_existentes += 1
 
+    def definir_objetivo_definido(self, x: int, y: int):
+        self.casilla_objetivo = self.casillas[x][y]
+        self.casilla_objetivo.hacer_objetivo(self.canvas, self.casilla_size)
+
     def definir_objetivo(self):
         if self.bloqueos_existentes >= self.numero_casillas * self.numero_casillas:
             return
@@ -210,15 +232,23 @@ class Laberinto:
             self.visitantes.append(visitante)
             return
 
+    def agregar_visitante_definido(self, visitante: Visitante, x: int, y: int):
+        casilla = self.casillas[x][y]
+
+        visitante.definir_posicion_inicial(
+            casilla, self.canvas, self.casilla_size, self.img_raton if self.raton else None)
+        visitante.dibujar()
+        self.visitantes.append(visitante)
+
     def obtener_vecinos_casilla(self, x: int, y: int):
         vecinos = []
 
         x - 1 >= 0 and not self.casillas[x -
                                          1][y].bloqueada and vecinos.append(self.casillas[x-1][y])
-        y - 1 >= 0 and not self.casillas[x][y -
-                                            1].bloqueada and vecinos.append(self.casillas[x][y-1])
         x + 1 < self.numero_casillas and not self.casillas[x +
                                                            1][y].bloqueada and vecinos.append(self.casillas[x+1][y])
+        y - 1 >= 0 and not self.casillas[x][y -
+                                            1].bloqueada and vecinos.append(self.casillas[x][y-1])
         y + 1 < self.numero_casillas and not self.casillas[x][y +
                                                               1].bloqueada and vecinos.append(self.casillas[x][y+1])
 
